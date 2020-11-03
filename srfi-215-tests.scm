@@ -23,7 +23,7 @@
 
 (import (scheme base)
         (scheme write)
-        (srfi xxx))
+        (srfi 215))
 
 (current-log-fields '(FACILITY 1))
 

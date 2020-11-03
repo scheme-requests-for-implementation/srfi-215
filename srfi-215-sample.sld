@@ -22,7 +22,7 @@
 ;; CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 ;; SOFTWARE.
 
-(define-library (srfi xxx)
+(define-library (srfi 215)
   (export
     send-log
     current-log-fields
