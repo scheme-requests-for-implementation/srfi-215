@@ -230,7 +230,6 @@
 (send-log 'INFO (string-append "User " username " logged in")
           'USERNAME username 'REMOTE_IP remote-ip)
 </pre>
-    </p>
 
     <p>
       <b>Parameter:</b> <code>current-log-fields</code>
@@ -404,15 +403,14 @@
 (current-log-callback
  (lambda (msg)
    (let ((p (current-error-port)))
-     (display "<" p)
+     (display "&lt;" p)
      (display (cdr (assq 'SEVERITY msg)) p)
-     (display ">" p)
+     (display "&gt;" p)
      (display (cdr (assq 'MESSAGE msg)) p)
      (newline p))))
 
 (send-log DEBUG "Log callback configured")
 </pre>
-    </p>
 
     <h2 id="acknowledgements">Acknowledgements</h2>
 
