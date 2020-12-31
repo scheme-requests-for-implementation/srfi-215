@@ -32,50 +32,6 @@
       applications can send them to a full logging system.
     </p>
 
-    <h2 id="issues">Issues</h2>
-
-    <p>
-      The names are open to bike-shedding. But please keep in mind
-      that the main purpose of this SRFI is to get a central point for
-      hooking up log systems. You can imagine all sorts of good
-      features for a log system, such as clever filtering and source
-      code information, but they are basically all out of scope.
-    </p>
-
-    <p>
-      Another question is whether the severities should be exported
-      constants and/or be behind a syntax, something
-      like <code>(log-severity INFO)</code>. Just using symbols makes
-      it very easy to write an invalid severity, especially since
-      there are many places in other systems that write e.g. CRIT
-      instead of CRITICAL or ERR instead of ERROR. In Scheme48 they
-      are given as <code>(syslog-level level-name)</code>. It's
-      possible to export the constants as they are now, but that
-      will not work in a case-insensitive Scheme.
-    </p>
-
-    <p>
-      It would probably be good to have automatic timestamps on log
-      entries. The application's log callback can easily add them, but
-      not for messages that were created before the callback was set.
-      It can add a lot of overhead to mandate timestamps if the wrong
-      clock is used, so it should be something fast
-      like <code>CLOCK_REALTIME_COARSE</code>. A log callback that
-      sends messages to syslog or the systemd journal will get
-      timestamps either way, so it might just add overhead.
-    </p>
-
-    <p>
-      It would be good if someone familiar with the Windows Event Log
-      could have a look over the API.
-    </p>
-
-    <p>
-      Only some of the messages from systemd.journal-fields(7) are
-      described. Should they be here at all or in the Scheme registry,
-      or perhaps included by reference?
-    </p>
-
     <h2 id="rationale">Rationale</h2>
 
     <p>
