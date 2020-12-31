@@ -45,53 +45,66 @@
 
     <p>
       Scheme lacks a standard logging system. There are some
-      precedents around in the Scheme ecosystem, such
+      precedents in the Scheme ecosystem, such
       as <a href="https://docs.racket-lang.org/reference/logging.html">Racket's
-      logging system</a> and Andreas
-      Rottmann's <a href="https://github.com/rotty/spells/blob/master/spells/logging.sls">spells</a>
-      package. These two are examples of high-level logging systems,
-      which do not directly specify the destination of log messages.
+        logging system</a>,
+      <a href="https://github.com/rotty/spells/blob/master/spells/logging.sls">Andreas
+        Rottmann's spells package</a>
+      and
+      <a href="https://github.com/ashinn/chibi-scheme/blob/master/lib/chibi/log.scm">Chibi
+        Scheme's log library</a>.
+      These are examples of high-level logging systems which are intended
+      to be used directly by code that needs to generate log messages.
       Another precedent is
       <a href="https://www.s48.org/1.9.2/manual/manual-Z-H-10.html#node_sec_9.10">Scheme48's
         access to the syslog facility</a>,
       which is a low-level logging system that specifically sends logs
-      to a syslog service.
+      to the syslog service.
     </p>
 
     <p>
-      The logging system in this SRFI is designed to be inserted in
-      the middle of a high-level and low-level logging system. The
-      main concern is to have a central point that all Scheme code can
-      use to send log messages, and which applications can hook up to
-      whichever log system it uses. Library code can also choose to use
-      another log system and application developers would then hook up
-      those log systems to the one specified here.
+      The logging system in this SRFI is designed to be inserted
+      in-between a high-level and a low-level logging system. The main
+      concern is to have a central point that all Scheme code can use
+      to send log messages, and which an application can hook up to
+      whichever log systems it uses. Library code can also choose to
+      use another log system and application developers would then
+      hook up those log systems to the one specified here. By
+      providing a well-known central exchange point through which all
+      log messages are passed, it becomes possible to work generally
+      with log messages throughout the whole application, regardless
+      of which frameworks end up being used to generate and consume
+      log messages.
     </p>
-    
+
     <p>
-      The API defined in this SRFI contains three procedures.
+      The API exported by this SRFI consists of one procedure, two
+      parameters and eight constants.
       The <code>send-log</code> procedure is a convenient procedure
       for constructing log messages. It can be used in code that just
       needs to produce log messages and that does not need any
       advanced log system features.
       The <code>current-log-fields</code> parameter lets an
       application set application-wide log fields, such as the syslog
-      facility. The <code>current-log-callback</code> parameter is the
-      actual central point for exchanging log messages. Making it a
-      parameter matches the usage of the current Scheme
-      input/output/error ports and allows some advanced features to be
-      built, such as capture of log messages in test runners and
-      custom filtering steps.
+      facility, thread-local fields such as a subsystem name, or fields
+      that are local to just some smaller context such as a test suite.
+      The <code>current-log-callback</code> parameter is the actual
+      central point for exchanging log messages. Its definition as a
+      parameter object is analogous to the definition
+      of <code>current-output-port</code> (etc.) and allows some
+      advanced features to be built, such as capture of log messages
+      in test runners and custom filtering steps.
     </p>
 
     <p>
-      The design bases some elements on the syslog protocol
+      This SRFI bases some design elements on the syslog protocol
       (<a href="https://www.ietf.org/rfc/rfc5424.html">RFC 5424</a>)
-      and others on the systemd journal. The design does not require
-      either of these, but both should be well suited as targets for
-      the logs produced by users this SRFI. It is expected that
-      implementers and other users of this SRFI will adjust log
-      messages as appropriate for the systems they are designing.
+      and others on the systemd journal. These are both suited as
+      targets for the logs produced by users of this SRFI, but nothing
+      in this SRFI requires the use of them. It is expected that
+      implementers and other users of this SRFI will construct and
+      adapt log messages to be appropriate for the systems they are
+      creating.
     </p>
 
     <h2 id="specification">Specification</h2>
@@ -104,13 +117,13 @@
 
     <p>
       Constructs a log message that contains the arguments and the
-      current log fields. The log message is passed to the current log
-      callback.
+      current log fields. The resulting log message is passed as
+      an argument to the current log callback.
     </p>
 
     <p>
       The <i>severity</i> is one of the constants in the table below.
-      The numeric value is added to the log message with the key
+      Its numeric value is added to the log message with the key
       <code>SEVERITY</code>.
     </p>
 
@@ -138,8 +151,8 @@
     <p>
       The optional arguments are grouped into pairs of <i>key</i>s
       and <i>value</i>s and are added to the log message, as in an
-      association list. The value is first converted as mentioned
-      below. The order in which they appear in the log message is
+      association list. The value is first converted as described
+      below. The order in which fields appear in the log message is
       unspecified.
     </p>
 
@@ -206,9 +219,9 @@
     </p>
 
     <p>
-      It is an error to mutate the list.
+      It is an error to mutate any part of the list.
     </p>
-    
+
     <p>
       <b>Parameter:</b> <code>current-log-callback</code>
     </p>
@@ -222,12 +235,11 @@
     <p>
       The default value for this parameter is a procedure that is
       meant to handle log messages that are generated before the
-      application changes the callback. This procedure buffers an
-      implementation-defined number of messages, holding them in
-      memory until the application sets the log callback. When the
-      callback is changed, the new callback receives each message that
-      had been buffered. The buffer is then cleared, to handle the
-      case where the default callback is restored.
+      application changes the callback. This default procedure buffers
+      an implementation-defined number of messages. When the callback
+      is changed, the new callback receives each message that had been
+      buffered. The buffer is then cleared, to handle the case where
+      the default callback is restored by <code>parameterize</code>.
     </p>
 
     <p>
@@ -258,13 +270,24 @@
 
     <p>
       Log messages are association lists that are normally expected to
-      be constructed by <code>send-log</code>, but can also be passed
-      directly to the log callback with some care.
+      be constructed by <code>send-log</code>, but they can also be
+      passed directly to the log callback with some care.
+      All keys in a log message MUST be symbols and all values MUST be
+      strings, exact integers or bytevectors.
     </p>
 
     <p>
-      All keys in a log message MUST be symbols and all values MUST be
-      strings, exact integers or bytevectors.
+      Here is a simple example message. The log message
+      <code>((MESSAGE . "Test message") (SEVERITY . 7))</code>
+      contains the message "Test message" and its severity
+      is DEBUG.
+    </p>
+
+    <p>
+      Applications and library developers are free to design their own
+      log message keys. For the sake of interoperability it is
+      desirable to standardize the names of certain keys, shown in the
+      table below.
     </p>
 
     <table>
@@ -306,13 +329,6 @@
     </p>
 
     <p>
-      Here is a simple example. The log message
-      <code>((MESSAGE . "Test message") (SEVERITY . 7))</code>
-      contains the message "Test message" and its severity
-      is DEBUG.
-    </p>
-
-    <p>
       An up-to-date list of log message keys will be found in the
       <a href="https://registry.scheme.org/">Scheme registry</a>.
       Additions to the list can be made directly in the registry
@@ -328,7 +344,6 @@
       <code>(srfi :215)</code> and <code>(srfi :215 logging)</code>.
     </p>
 
-
     <h2 id="implementation">Implementation</h2>
 
     <p>
@@ -340,12 +355,9 @@
     <a href="srfi-215-sample.sld">Source for the sample implementation.</a>
 
     <p>
-      Here is an example of a simple log callback. It prints messages
-      similarly to how the Linux kernel prints raw log messages (which
-      is why the facility in the priority field is set as if the
-      messages originated from the kernel). When a program using this
-      callback runs as a systemd unit, the output will be translated
-      to journal entries with the correct severities set. A more
+      Here is an example of a simple log callback. When a program
+      using this callback runs as a systemd unit, the output will be
+      translated to journal entries marked with severities. A more
       complete integration with the systemd journal would also pass
       along the fields given to <code>send-log</code> through the
       appropriate API.
