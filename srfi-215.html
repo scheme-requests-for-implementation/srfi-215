@@ -165,29 +165,22 @@
     </p>
 
     <p>
-      Every <i>value</i> is either a string, bytevector or exact
-      integer. All other objects are converted to strings as if they
-      had been printed to a string output port by
-      the <code>write</code> procedure. Implementations MAY convert
-      these other objects differently, but the resulting value in the
-      log message MUST be a string. A value MAY be converted into
-      multiple fields.
+      To simplify the handling of values in log callbacks that need
+      to serialize values, every <i>value</i> satisfies at least one
+      of the type predicates listed under <a href="#keys">Log messages</a>.
+      All other objects are converted to strings as if they
+      had been printed to a string output port by the
+      <code>write</code> procedure.
     </p>
 
     <p>
-      It is RECOMMENDED that implementations convert native compound
-      condition types into multiple message fields. Implementations
-      which do this MUST use field names with this
-      structure: <i>key</i>_<i>condition-type</i>. Implementation that
-      do this conversion MUST convert non-compound conditions as if
-      they appeared alone in a compound condition.
-    </p>
-
-    <p>
-      Implementations MAY append additional fields to the message,
-      such as internal process identifiers, timestamps and other
-      useful context. But it is expected that a high-level logging
-      system will take care of these aspects.
+      Implementations MAY convert objects in some other way, but the
+      resulting value in the log message MUST satisfy one of the
+      predicates. A value MAY be converted into an arbitrary number of
+      fields. Implementations MAY append additional fields to the
+      message, such as internal process identifiers, timestamps and
+      other useful context. But it is expected that a high-level
+      logging system will take care of these aspects.
     </p>
 
     <p>
@@ -272,8 +265,13 @@
       Log messages are association lists that are normally expected to
       be constructed by <code>send-log</code>, but they can also be
       passed directly to the log callback with some care.
-      All keys in a log message MUST be symbols and all values MUST be
-      strings, exact integers or bytevectors.
+      All keys in a log message MUST be symbols and all values MUST satisfy
+      at least one of
+      <code>string?</code>,
+      <code>bytevector?</code>,
+      <code>exact-integer?</code>,
+      <code>error-object?</code> (R7RS) or
+      <code>condition?</code> (R6RS).
     </p>
 
     <p>

@@ -86,6 +86,8 @@
                        (v^ (cond ((string? v) v)
                                  ((and (integer? v) (exact? v)) v)
                                  ((bytevector? v) v)
+                                 ;; ((condition?) v) ;R6RS
+                                 ((error-object? v) v) ;R7RS
                                  (else
                                   (let ((p (open-output-string)))
                                     (write v p)
