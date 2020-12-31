@@ -64,7 +64,7 @@
 
     <p>
       The logging system in this SRFI is designed to be inserted
-      in-between a high-level and a low-level logging system. The main
+      in between a high-level and a low-level logging system. The main
       concern is to have a central point that all Scheme code can use
       to send log messages, and which an application can hook up to
       whichever log systems it uses. Library code can also choose to
@@ -334,10 +334,10 @@
     <p>
       Implementations are free to use any reasonable implementation of
       parameter objects, such as SRFI-39, but care should be taken
-      that parameterize does not affect the behavior of other threads
-      of control. If an implementation provides R7RS (or a future
-      standard/report with parameters) then it SHOULD use parameters
-      that are compatible with the ones in the base library.
+      that <code>parameterize</code> does not affect the behavior of
+      other threads of control. If an implementation provides R7RS (or
+      a future standard/report with parameters) then it SHOULD use
+      parameters that are compatible with the ones in the base library.
     </p>
 
     <h2 id="library-name">Library name</h2>
@@ -353,7 +353,7 @@
 
     <p>
       A sample implementation is provided as an R7RS library. It has
-      no dependencies beyond R7RS-small. A test suite is also
+      no dependencies beyond R7RS Small. A test suite is also
       provided.
     </p>
 
