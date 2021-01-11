@@ -246,7 +246,7 @@
     <p>
       Log callbacks MAY discard any field and MAY discard any message.
       Log callbacks MUST ensure that all messages from the same thread
-      of control arrive in the same order that they were passed to the
+      of control arrive in the same order in which they were passed to the
       callback.
     </p>
 
@@ -334,7 +334,7 @@
 
     <p>
       Implementations are free to use any reasonable implementation of
-      parameter objects, such as SRFI-39, but care should be taken
+      parameter objects, such as <a href="https://srfi.schemers.org/srfi-39/">SRFI 39</a>, but care should be taken
       that <code>parameterize</code> does not affect the behavior of
       other threads of control. If an implementation provides R7RS (or
       a future standard/report with parameters) then it SHOULD use
