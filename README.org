@@ -8,7 +8,7 @@ keywords: [[https://srfi.schemers.org/?keywords=operating-system][Operating Syst
 
 This repository hosts [[https://srfi.schemers.org/srfi-215/][SRFI 215]]: Central Log Exchange, a [[https://srfi.schemers.org/][Scheme Request for Implementation]].
 
-This SRFI is in /draft/ status.
+This SRFI is in /final/ status.
 
 The full documentation for this SRFI can be found in the [[https://srfi.schemers.org/srfi-215/srfi-215.html][SRFI Document]].
 
