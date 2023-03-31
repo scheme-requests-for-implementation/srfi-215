@@ -19,7 +19,9 @@
       <li>Draft #1 published: 2020-11-03</li>
       <li>Draft #2 published: 2020-12-31</li>
       <li>Finalized: 2021-01-11</li>
-    </ul>
+      <li>Revised to fix errata:
+        <ul>
+          <li>2023-03-31 (Fixed: <code>MSG</code> should be <a href="#log-message-keys"><code>MESSAGE</code></a>.)</li></ul></li></ul>
 
     <h2 id="abstract">Abstract</h2>
 
@@ -285,7 +287,7 @@
       table below.
     </p>
 
-    <table>
+    <table id="log-message-keys">
       <caption>Log message keys</caption>
       <thead>
         <tr>
@@ -297,7 +299,7 @@
       </thead>
       <tbody>
         <tr><td>SEVERITY<sup>‡</sup></td>   <td>yes</td> <td>severity as an exact integer in [0,7]</td>   <td>RFC 5424, 6.2.1</td></tr>
-        <tr><td>MSG</td>                    <td>yes</td> <td>free-form message as a string</td>                                         </tr>
+        <tr><td>MESSAGE</td>                    <td>yes</td> <td>free-form message as a string</td>                                         </tr>
         <tr><td>FACILITY</td>               <td>no</td>  <td>facility as an exact integer</td>            <td>RFC 5424, 6.2.1</td></tr>
         <tr><td>APP-NAME<sup>✻</sup></td>   <td>no</td>  <td>APP-NAME as a string</td>                    <td>RFC 5424, 6.2.5</td></tr>
         <tr><td>PROCID<sup>✻</sup></td>     <td>no</td>  <td>PROCID as a string</td>                      <td>RFC 5424, 6.2.6</td></tr>
