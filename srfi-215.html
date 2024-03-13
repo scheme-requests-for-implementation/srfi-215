@@ -21,7 +21,8 @@
       <li>Finalized: 2021-01-11</li>
       <li>Revised to fix errata:
         <ul>
-          <li>2023-03-31 (Fixed: <code>MSG</code> should be <a href="#log-message-keys"><code>MESSAGE</code></a>.)</li></ul></li></ul>
+          <li>2023-03-31 (Fixed: <code>MSG</code> should be <a href="#log-message-keys"><code>MESSAGE</code></a>.)</li>
+          <li>2024-03-13 (Fixed: Pass <code>INFO</code>, not <code>'INFO</code>, in <a href="#example">example</a>.)</li></ul></li></ul>
 
     <h2 id="abstract">Abstract</h2>
 
@@ -191,7 +192,7 @@
       the <i>value</i>s after calling this procedure.
     </p>
 
-    <p>
+    <p id="example">
       Example: <pre>
 (send-log INFO (string-append "User " username " logged in")
           'USERNAME username 'REMOTE_IP remote-ip)
