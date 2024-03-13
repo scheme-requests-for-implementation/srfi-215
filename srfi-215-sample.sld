@@ -111,7 +111,8 @@
                           (set! num-pending-logs (+ num-pending-logs 1))))
                     (lambda (hook)
                       (unless (procedure? hook)
-                        (error "current-log-hook: expected a procedure" hook))
+                        (error "current-log-callback: expected a procedure"
+                               hook))
                       (let ((q pending-logs))
                         (set! num-pending-logs 0)
                         (set! pending-logs (make-queue))
