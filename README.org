@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: MIT
 * SRFI 215: Central Log Exchange
 
-** by Göran Weinholt
+** by Gwen Weinholt
 
 
 
